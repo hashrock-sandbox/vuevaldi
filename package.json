@@ -1,0 +1,7 @@
+{
+  "name": "vuevaldi",
+  "main": "index.html",
+  "window": {
+	"toolbar": false
+  }
+}
