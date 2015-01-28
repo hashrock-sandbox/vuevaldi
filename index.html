@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="reset.css"/>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+    <div id="container">
+        <div id="tab">
+            <img src="http://vuejs.org/images/logo.png" id="logo" alt=""/>
+            <ul id="tabs">
+                <li v-repeat="tab : tabs" v-on="click: tabIndex = $index" v-class="active: tabIndex===$index">
+                    <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+                    {{tab.title}}
+                </li>
+                <li class="addTab">...</li>
+            </ul>
+        </div>
+        <div id="address">
+            <input type="text" id="address__input" v-model="location"/>
+        </div>
+        <iframe id="contents__iframe" src="{{location}}" frameborder="0">
+        </iframe>
+    </div>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script src="./bower_components/vue/dist/vue.js"></script>
+    <script src="./Sortable.js"></script>
+    <script src="./bower_components/bounce.js/bounce.js"></script>
+    <script>
+        new Vue({
+            el: "#container",
+            data:{
+                tabIndex : 0,
+                location: "",
+                tabs: [
+                    {
+                        title: "プレゼン",
+                        url: "http://hashrock.github.io/vue-mini-keynote/"
+                    },
+                    {
+                        title: "Google",
+                        url: "https://www.google.co.jp/"
+                    },
+                    {
+                        title: "vue.js",
+                        url: " http://vuejs.org/"
+                    }
+                ]
+            },
+            watch:{
+                "tabIndex": function(value){
+                    this.location = this.tabs[value].url;
+                    var bounce = new Bounce();
+                    bounce.scale({
+                        from: { x: 0.5, y: 0.5 },
+                        to: { x: 1, y: 1 }
+                    });
+                    bounce.applyTo(document.querySelectorAll("img#logo"));
+
+                    var bounce = new Bounce();
+                    bounce.translate({
+                        from: { x: 0, y: 0 },
+                        to: { x: 0, y: 0 }
+                    });
+                    bounce.applyTo(document.querySelectorAll("li"));
+
+                    var bounce = new Bounce();
+                    bounce.translate({
+                        from: { x: 0, y: 0 },
+                        to: { x: 0, y: -5 }
+                    });
+                    bounce.applyTo(document.querySelectorAll("li.active"));
+                }
+            },
+            ready: function(){
+                this.location = "http://hashrock.github.io/vue-mini-keynote/";
+                var list = document.getElementById("tabs");
+                Sortable.create(list, {animation: 150}); // That's all.
+            }
+        });
+    </script>
+</body>
+</html>
